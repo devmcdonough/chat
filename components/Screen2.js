@@ -3,14 +3,14 @@ import { StyleSheet, View, Text } from "react-native";
 
 const Screen2 = ({ route, navigation }) => {
 
-    const { name } = route.params;
+    const { name, backgroundColor } = route.params;
 
     useEffect(() => {
         navigation.setOptions({ title: name });
     }, []);
 
     return (
-        <View style={styles.container} >
+        <View style={[styles.container, { backgroundColor }]}>
             <Text>Hello Screen2!</Text>
         </View>
     );
