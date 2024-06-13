@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ImageBackground, StyleSheet, View, Text, Button, TextInput, TouchableOpacity } from "react-native";
 import backgroundImage from '../assets/Background_Image.png';
 
-const Screen1 = ({ navigation }) => {
+const Start = ({ navigation }) => {
     const [name, setName] = useState('');
     const [backgroundColor, setBackgroundColor] = useState('');
     const colors = ['#128c7e', '#25d366', '#dcf8c6', '#ece5dd'];
@@ -82,4 +82,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Screen1;
+export default Start;
