@@ -29,8 +29,8 @@ const Start = ({ navigation }) => {
             </View>
             <TouchableOpacity 
                 style={styles.button}
-                title="Go to Screen 2"
-                onPress={() => navigation.navigate('Screen2', { name, backgroundColor })}
+                title="Go to Chat"
+                onPress={() => navigation.navigate('Chat', { name, backgroundColor })}
             >
                 <Text style={styles.buttonText}>Go to Chat</Text>
             </TouchableOpacity>
