@@ -9,6 +9,7 @@ const Start = ({ navigation, db }) => {
   const [backgroundColor, setBackgroundColor] = useState('');
   const colors = ['#128c7e', '#25d366', '#dcf8c6', '#ece5dd'];
 
+  // Allows users to sign in without creating an account
   const auth = getAuth();
   const signInUser = () => {
     signInAnonymously(auth)

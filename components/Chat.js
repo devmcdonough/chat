@@ -7,6 +7,7 @@ const Chat = ({ route, navigation, db }) => {
     const [messages, setMessages] = useState([]);
     const { name, backgroundColor, userID } = route.params;
 
+    // Queries firebase for real-time updates on the messages db
     useEffect(() => {
         const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
         const unsubMessages = onSnapshot(q, (snapshot) => {
@@ -25,6 +26,7 @@ const Chat = ({ route, navigation, db }) => {
         }
     }, [db]);
 
+    // Updates username on chat page
     useEffect(() => {
         navigation.setOptions({ title: name });
     }, [name, navigation]);
@@ -33,6 +35,7 @@ const Chat = ({ route, navigation, db }) => {
         await addDoc(collection(db, "messages"), newMessages[0]);
     }
 
+    // Renders text bubbles and colors
     const renderBubble = (props) => {
         return (
             <Bubble

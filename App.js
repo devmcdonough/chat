@@ -9,6 +9,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
 
+// Unique code from firebase that allows access to a specific db
 const App = () => {
   const firebaseConfig = {
     apiKey: "AIzaSyCXNbCuAt68hbHagvS4uKhb11vWMFn3e3k",
@@ -19,6 +20,7 @@ const App = () => {
     appId: "1:339859179317:web:6e49893e4fcab511e62e7c"
   };
 
+  // Needed to connect to firebase
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
