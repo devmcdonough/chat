@@ -9,16 +9,30 @@ const Chat = ({ route, navigation, db, isConnected }) => {
     const { name, backgroundColor, userID } = route.params;
 
     const loadCachedMessages = async () => {
-        const cachedMessages = (await AsyncStorage.getItem('messages')) || [];
-        setMessages(JSON.parse(cachedMessages));
+        try {
+            const cachedMessages = await AsyncStorage.getItem('messages');
+            if (cachedMessages) {
+                setMessages(JSON.parse(cachedMessages));
+            } else {
+                setMessages([]);
+            }
+        } catch (error) {
+            console.error("Failed to load cached messages:", error);
+        }
+    }
+
+    const cacheMessages = async (messagesToCache) => {
+        try {
+            await AsyncStorage.setItem('messages', JSON.stringify(messagesToCache));
+        } catch (error) {
+            console.error("Failed to cache messages:", error);
+        }
     }
 
     let unsubMessages;
 
-    // Queries firebase for real-time updates on the messages db
     useEffect(() => {
         if (isConnected === true) {
-            // Unsubscribes current onSnapshot() listener to avoid registering multiple users if useEffect runs again
             if (unsubMessages) {
                 unsubMessages();
             }
@@ -34,26 +48,24 @@ const Chat = ({ route, navigation, db, isConnected }) => {
                     });
                 });
                 setMessages(newMessages);
-                AsyncStorage.setItem('messages', JSON.stringify(newMessages));
+                cacheMessages(newMessages);
             });
         } else {
             loadCachedMessages();
         }
-    
+
         return () => {
             if (unsubMessages) {
                 unsubMessages(); 
             }
         }
     }, [isConnected]);
-    
+
     const showInputToolbar = (props) => {
         if (isConnected) return <InputToolbar {...props} />
         else return null;
     }
 
-
-    // Updates username on chat page
     useEffect(() => {
         navigation.setOptions({ title: name });
     }, [name, navigation]);
@@ -62,7 +74,6 @@ const Chat = ({ route, navigation, db, isConnected }) => {
         await addDoc(collection(db, "messages"), newMessages[0]);
     }
 
-    // Renders text bubbles and colors
     const renderBubble = (props) => {
         return (
             <Bubble
@@ -84,7 +95,7 @@ const Chat = ({ route, navigation, db, isConnected }) => {
             <GiftedChat
                 messages={messages}
                 renderBubble={renderBubble}
-                showInputToolbar={showInputToolbar}
+                renderInputToolbar={showInputToolbar}
                 onSend={messages => onSend(messages)}
                 user={{ _id: userID, name }}
             />

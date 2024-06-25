@@ -14,11 +14,11 @@ const Start = ({ navigation, db }) => {
   const auth = getAuth();
   const signInUser = () => {
     signInAnonymously(auth)
-      .then(result => {
+      .then(res => {
         navigation.navigate("Chat", {
           name,
           backgroundColor,
-          userID: result.user.uid,
+          userID: res.user.uid,
         });
         Alert.alert("Signed in successfully!");
       })
