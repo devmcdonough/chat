@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from "reac
 import { getAuth, signInAnonymously } from "firebase/auth";
 import { ImageBackground } from 'react-native';
 import backgroundImage from '../assets/Background_Image.png';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Start = ({ navigation, db }) => {
   const [name, setName] = useState('');
