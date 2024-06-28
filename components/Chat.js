@@ -1,12 +1,22 @@
 import { collection, onSnapshot, orderBy, addDoc, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { StyleSheet, View, Text, KeyboardAvoidingView, Platform } from "react-native";
+import { StyleSheet, View, KeyboardAvoidingView, Platform } from "react-native";
 import { Bubble, GiftedChat, InputToolbar } from "react-native-gifted-chat";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CustomActions from './CustomActions';
+import MapView from 'react-native-maps';
 
-const Chat = ({ route, navigation, db, isConnected }) => {
+const Chat = ({ route, navigation, db, isConnected, storage }) => {
     const [messages, setMessages] = useState([]);
     const { name, backgroundColor, userID } = route.params;
+
+    const cacheMessages = async (messagesToCache) => {
+        try {
+            await AsyncStorage.setItem('messages', JSON.stringify(messagesToCache));
+        } catch (error) {
+            console.error("Failed to cache messages:", error);
+        }
+    }
 
     const loadCachedMessages = async () => {
         try {
@@ -21,22 +31,13 @@ const Chat = ({ route, navigation, db, isConnected }) => {
         }
     }
 
-    const cacheMessages = async (messagesToCache) => {
-        try {
-            await AsyncStorage.setItem('messages', JSON.stringify(messagesToCache));
-        } catch (error) {
-            console.error("Failed to cache messages:", error);
-        }
-    }
-
-    let unsubMessages;
-
     useEffect(() => {
-        if (isConnected === true) {
+        let unsubMessages;
+
+        if (isConnected) {
             if (unsubMessages) {
                 unsubMessages();
             }
-            unsubMessages = null;
             const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
             unsubMessages = onSnapshot(q, (snapshot) => {
                 let newMessages = [];
@@ -56,7 +57,7 @@ const Chat = ({ route, navigation, db, isConnected }) => {
 
         return () => {
             if (unsubMessages) {
-                unsubMessages(); 
+                unsubMessages();
             }
         }
     }, [isConnected]);
@@ -90,6 +91,28 @@ const Chat = ({ route, navigation, db, isConnected }) => {
         );
     }
 
+    const renderCustomActions = (props) => {
+        return <CustomActions storage={storage} {...props} />;
+    };
+
+    const renderCustomView = (props) => {
+        const { currentMessage } = props;
+        if (currentMessage.location) {
+            return (
+                <MapView
+                    style={{ width: 150, height: 100, borderRadius: 13, margin: 3 }}
+                    region={{
+                        latitude: currentMessage.location.latitude,
+                        longitude: currentMessage.location.longitude,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    }}
+                />
+            );
+        }
+        return null;
+    }
+
     return (
         <View style={[styles.container, { backgroundColor }]}>
             <GiftedChat
@@ -97,6 +120,8 @@ const Chat = ({ route, navigation, db, isConnected }) => {
                 renderBubble={renderBubble}
                 renderInputToolbar={showInputToolbar}
                 onSend={messages => onSend(messages)}
+                renderActions={renderCustomActions}
+                renderCustomView={renderCustomView}
                 user={{ _id: userID, name }}
             />
             {Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null}

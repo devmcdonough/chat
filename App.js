@@ -9,6 +9,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNetInfo } from '@react-native-community/netinfo';
+import { getStorage } from "firebase/storage";
 
 LogBox.ignoreLogs(["AsyncStorage has been extracted from"]);
 
@@ -29,6 +30,9 @@ const App = () => {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
+  // Prepares storage location in Firebase Storage Cloud so a blob can be uploaded
+  const storage = getStorage(app);
+
   const connectionStatus = useNetInfo();
 
   useEffect(() => {
@@ -47,7 +51,12 @@ const App = () => {
           {props => <Start {...props} db={db} />}
         </Stack.Screen>
         <Stack.Screen name='Chat'>
-          {props => <Chat isConnected={connectionStatus.isConnected} {...props} db={db} />}
+          {props => <Chat 
+          isConnected={connectionStatus.isConnected} 
+          {...props} 
+          db={db} 
+          storage={storage} 
+          />}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
