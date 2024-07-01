@@ -16,7 +16,7 @@ LogBox.ignoreLogs(["AsyncStorage has been extracted from"]);
 const Stack = createNativeStackNavigator();
 
 // Unique code from firebase that allows access to a specific db
-const App = () => {
+                          const App = () => {
   const firebaseConfig = {
     apiKey: "AIzaSyCXNbCuAt68hbHagvS4uKhb11vWMFn3e3k",
     authDomain: "chat-app-715d8.firebaseapp.com",

@@ -6,10 +6,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomActions from './CustomActions';
 import MapView from 'react-native-maps';
 
+// Main chat component
 const Chat = ({ route, navigation, db, isConnected, storage }) => {
     const [messages, setMessages] = useState([]);
     const { name, backgroundColor, userID } = route.params;
 
+    // Saves messages for offline use
     const cacheMessages = async (messagesToCache) => {
         try {
             await AsyncStorage.setItem('messages', JSON.stringify(messagesToCache));
@@ -18,6 +20,7 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
         }
     }
 
+    // Loads saved messages for offline use
     const loadCachedMessages = async () => {
         try {
             const cachedMessages = await AsyncStorage.getItem('messages');
@@ -31,9 +34,9 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
         }
     }
 
+    // Allows for real-time updates if online and loads cached messages when offline
     useEffect(() => {
         let unsubMessages;
-
         if (isConnected) {
             if (unsubMessages) {
                 unsubMessages();
@@ -54,7 +57,6 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
         } else {
             loadCachedMessages();
         }
-
         return () => {
             if (unsubMessages) {
                 unsubMessages();
@@ -62,19 +64,23 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
         }
     }, [isConnected]);
 
+    // Makes input toolbar invisble if network is not connected
     const renderInputToolbar = (props) => {
         if (isConnected) return <InputToolbar {...props} />
         else return null;
     }
 
+    // Changes the title at top when changing pages or adding a different name
     useEffect(() => {
         navigation.setOptions({ title: name });
     }, [name, navigation]);
 
+    // Adds messages to db
     const onSend = async (newMessages) => {
         await addDoc(collection(db, "messages"), newMessages[0]);
     }
 
+    // React tool to render text bubbles and assign colors to sender and receiver
     const renderBubble = (props) => {
         return (
             <Bubble
@@ -91,10 +97,12 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
         );
     }
 
+    // Allows action sheet actions to appear in input toolbar
     const renderCustomActions = (props) => {
         return <CustomActions storage={storage} {...props} />;
     };
 
+    // Renders location sharing messages
     const renderCustomView = (props) => {
         const { currentMessage } = props;
         if (currentMessage.location) {

@@ -59,7 +59,34 @@ With the increasing use of mobile devices for daily tasks, there is a growing de
 ## Installation
 1. **Clone the repository**: git clone https://github.com/devmcdonough/chat
 2. **Install dependencies**: npm install
-3. **Start the Expo development server**: npx expo start
+3. **Install required dependencies**: 
+- "@expo/metro-runtime": "~3.2.1"
+- "@react-native-async-storage/async-storage": "^1.23.1",
+- "@react-native-community/netinfo": "11.3.1",
+- "@react-navigation/elements": "^1.3.30",
+- "@react-navigation/native": "^6.1.17",
+- "@react-navigation/native-stack": "^6.9.26",
+- "expo": "^51.0.14",
+- "expo-image-picker": "~15.0.5",
+- "expo-location": "~17.0.1",
+- "expo-status-bar": "~1.12.1",
+- "firebase": "^10.3.1",
+- "metro-react-native-babel-transformer": "^0.77.0",
+- "react": "18.2.0",
+- "react-dom": "18.2.0",
+- "react-native": "0.74.2",
+- "react-native-gifted-chat": "^2.4.0",
+- "react-native-maps": "^1.15.6",
+- "react-native-safe-area-context": "4.10.1",
+- "react-native-screens": "3.31.1",
+- "react-native-web": "~0.19.10"
+4. **Google Firestor/Firebase**
+- Create an account
+- Start a new project
+- Set up database under build --> Firestore Database
+- Activate storage
+- Change rules from 'allow read, write: if false;' to 'allow read, write: if true;'
+5. **Start the Expo development server**: npx expo start
 
 ## Usage
 **1. Running on an Emulator:**

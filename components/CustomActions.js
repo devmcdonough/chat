@@ -4,7 +4,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 
-
+// Main component for custom actions
 const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage, userID }) => {
     const actionSheet = useActionSheet();
 
@@ -16,6 +16,7 @@ const generateReference = (uri) => {
     return `${userID}-${timeStamp}-${imageName}`;
 }
 
+// Uploads the image and sends the image URL to the chat
 const uploadAndSendImage = async (imageURI) => {
     const uniqueRefString = generateReference(imageURI);
      // Picks file to upload
@@ -30,7 +31,7 @@ const uploadAndSendImage = async (imageURI) => {
 });
 }
 
-// Converts image into a blob
+// Asks for permission and allows user to pick image from library
 const pickImage = async () => {
     let permissions = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissions?.granted) {
@@ -40,6 +41,7 @@ const pickImage = async () => {
         }
     }
 
+    // Asks for permission and allows user to take photo
     const takePhoto = async () => {
         let permissions = await ImagePicker.requestCameraPermissionsAsync();
         if (permissions?.granted) {
@@ -49,6 +51,7 @@ const pickImage = async () => {
         }
     }
 
+    // Asks for permission and allows user to share location
     const getLocation = async () => {
         let permissions = await Location.requestForegroundPermissionsAsync();
         if (permissions?.granted) {
@@ -68,8 +71,8 @@ const pickImage = async () => {
         }
     }
     
+        // Action sheet options for picking image, taking photo or sending location
         const onActionPress = () => {
-            // Option in the action sheet
             const options = ['Choose from Library', 'Take Picture', 'Send Location', 'Cancel'];
             const cancelButtonIndex = options.length - 1;
             actionSheet.showActionSheetWithOptions(

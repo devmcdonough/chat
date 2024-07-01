@@ -3,25 +3,30 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from "reac
 import { getAuth, signInAnonymously } from "firebase/auth";
 import { ImageBackground } from 'react-native';
 import backgroundImage from '../assets/Background_Image.png';
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
+// Main start page component
 const Start = ({ navigation, db }) => {
   const [name, setName] = useState('');
   const [backgroundColor, setBackgroundColor] = useState('');
   const colors = ['#128c7e', '#25d366', '#dcf8c6', '#ece5dd'];
 
-  // Allows users to sign in without creating an account
+  // Firebase authentication
   const auth = getAuth();
+
+  // Allows anonymous sign-in
   const signInUser = () => {
     signInAnonymously(auth)
       .then(res => {
         navigation.navigate("Chat", {
+          // Pass user info to chat.js
           name,
           backgroundColor,
           userID: res.user.uid,
         });
+        // Notification for signing in successfully
         Alert.alert("Signed in successfully!");
       })
+      // Notification for when user is unable to sign in
       .catch((error) => {
         Alert.alert("Unable to sign in, we're very sorry!");
         console.error(error);
@@ -31,14 +36,15 @@ const Start = ({ navigation, db }) => {
   return (
     <View style={styles.container}>
       <ImageBackground source={backgroundImage} style={styles.background}>
-        <Text>Hello Screen1!</Text>
+        <View  style={styles.overlay}>
+        <Text style={styles.text}>Welcome!</Text>
         <TextInput
           style={styles.textInput}
           value={name}
           onChangeText={setName}
           placeholder="Enter your username"
         />
-        <Text>Choose Background color</Text>
+        <Text style={styles.text}>Choose Background color</Text>
         <View style={styles.colorOptions}>
           {colors.map((color, index) => (
             <TouchableOpacity
@@ -54,6 +60,7 @@ const Start = ({ navigation, db }) => {
         >
           <Text style={styles.buttonText}>Go to Chat</Text>
         </TouchableOpacity>
+        </View>
       </ImageBackground>
     </View>
   );
@@ -67,11 +74,15 @@ const styles = StyleSheet.create({
   },
   textInput: {
     width: '88%',
-    padding: 15,
+    padding: 16,
     borderWidth: 1,
     marginTop: 15,
     marginBottom: 15,
     backgroundColor: '#f9f9f9'
+  },
+  text: {
+    color: '#ffffff',
+    fontSize: 16
   },
   background: {
     flex: 1,
@@ -89,7 +100,8 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   buttonText: {
-    color: '#ffffff'
+    color: '#ffffff',
+    fontSize: 16
   },
   colorButton: {
     width: 48,
@@ -101,6 +113,14 @@ const styles = StyleSheet.create({
   },
   colorOptions: {
     flexDirection: 'row'
+  },
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    borderRadius: 8,
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '90%'
   }
 });
 
