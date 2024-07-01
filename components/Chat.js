@@ -62,7 +62,7 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
         }
     }, [isConnected]);
 
-    const showInputToolbar = (props) => {
+    const renderInputToolbar = (props) => {
         if (isConnected) return <InputToolbar {...props} />
         else return null;
     }
@@ -118,7 +118,7 @@ const Chat = ({ route, navigation, db, isConnected, storage }) => {
             <GiftedChat
                 messages={messages}
                 renderBubble={renderBubble}
-                renderInputToolbar={showInputToolbar}
+                renderInputToolbar={renderInputToolbar}
                 onSend={messages => onSend(messages)}
                 renderActions={renderCustomActions}
                 renderCustomView={renderCustomView}

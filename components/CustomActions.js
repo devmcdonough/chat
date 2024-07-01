@@ -98,7 +98,7 @@ const pickImage = async () => {
 
     return (
         <TouchableOpacity 
-        style={StyleSheet.container}
+        style={styles.container}
         onPress={onActionPress}>
             <View style={[styles.wrapper, wrapperStyle]}>
                 <Text style={[styles.iconText, iconTextStyle]}>+</Text>
@@ -109,21 +109,23 @@ const pickImage = async () => {
 
 const styles = StyleSheet.create({
     container: {
-        width: 24,
-        height: 24,
+        width: 28,
+        height: 28,
         marginLeft: 12,
         marginBottom: 12,
     },
     wrapper: {
         borderRadius: 16,
-        borderColor: '#b2b2b2',
+        borderColor: '#949494',
         borderWidth: 2,
         flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     iconText: {
-        color: '#b2b2b2',
+        color: '#949494',
         fontWeight: 'bold',
-        fontSize: 10,
+        fontSize: 16,
         backgroundColor: 'transparent',
         textAlign: 'center',
     },
